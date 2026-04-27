@@ -87,6 +87,28 @@ function Dashboard() {
         </div>
       </section>
 
+      {/* Onboarding: primeiro membro */}
+      {isSacerdote && stats.members === 0 && (
+        <Card className="overflow-hidden border-bessem/30 bg-gradient-to-br from-bessem-soft to-card p-5 shadow-elevated">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground">
+              <Users className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">Vamos começar pela sua casa</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Cadastre o primeiro filho da casa com nome civil, Orunkó e cargo/função.
+              </p>
+              <Link to="/app/membros" search={{ novo: true }} className="mt-3 inline-block">
+                <Button size="sm" className="bg-gradient-primary shadow-glow">
+                  <Plus className="mr-1 h-4 w-4" /> Cadastrar primeiro membro
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Stats */}
       <section className="grid grid-cols-2 gap-3">
         <StatCard label="Filhos da casa" value={stats.members} icon={Users} />

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
@@ -20,6 +21,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/membros")({
   component: MembersPage,
+  validateSearch: z.object({ novo: z.coerce.boolean().optional() }),
 });
 
 interface Member {
@@ -34,10 +36,15 @@ interface Member {
 
 function MembersPage() {
   const { isSacerdote } = useAuth();
+  const { novo } = Route.useSearch();
   const [members, setMembers] = useState<Member[]>([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (novo && isSacerdote) setOpen(true);
+  }, [novo, isSacerdote]);
 
   const load = async () => {
     setLoading(true);
@@ -104,11 +111,27 @@ function MembersPage() {
         <p className="text-center text-sm text-muted-foreground">Carregando…</p>
       ) : filtered.length === 0 ? (
         <Card className="p-8 text-center shadow-soft">
-          <p className="text-sm text-muted-foreground">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-bessem-soft">
+            <UserIcon className="h-6 w-6 text-primary" />
+          </div>
+          <p className="text-sm font-medium">
             {members.length === 0
-              ? "Nenhum filho da casa cadastrado ainda."
-              : "Nenhum resultado."}
+              ? "Sua casa ainda está vazia"
+              : "Nenhum resultado para essa busca."}
           </p>
+          {members.length === 0 && isSacerdote && (
+            <>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Comece cadastrando o primeiro filho da casa, com Orunkó e cargo.
+              </p>
+              <Button
+                onClick={() => setOpen(true)}
+                className="mt-4 bg-gradient-primary shadow-glow"
+              >
+                <Plus className="mr-1 h-4 w-4" /> Cadastrar primeiro membro
+              </Button>
+            </>
+          )}
         </Card>
       ) : (
         <div className="space-y-2">
