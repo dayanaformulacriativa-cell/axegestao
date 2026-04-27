@@ -16,7 +16,9 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Plus, Search, ChevronRight, User as UserIcon } from "lucide-react";
+import { Plus, Search, ChevronRight, User as UserIcon, Phone, Calendar, Sparkles, Pencil } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/membros")({
@@ -176,13 +178,18 @@ export function MemberDialog({
     entry_date: member?.entry_date ?? "",
   });
   const [saving, setSaving] = useState(false);
+  const [step, setStep] = useState<"edit" | "preview">("edit");
 
-  const submit = async (e: React.FormEvent) => {
+  const goPreview = (e: React.FormEvent) => {
     e.preventDefault();
     if (form.civil_name.trim().length < 2) {
       toast.error("Informe o nome civil.");
       return;
     }
+    setStep("preview");
+  };
+
+  const confirm = async () => {
     setSaving(true);
     const payload = {
       civil_name: form.civil_name.trim(),
@@ -206,74 +213,186 @@ export function MemberDialog({
   return (
     <DialogContent className="max-w-md">
       <DialogHeader>
-        <DialogTitle>{member ? "Editar" : "Novo filho da casa"}</DialogTitle>
+        <DialogTitle>
+          {step === "preview"
+            ? "Revisar perfil"
+            : member
+              ? "Editar"
+              : "Novo filho da casa"}
+        </DialogTitle>
       </DialogHeader>
-      <form onSubmit={submit} className="space-y-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="civil_name">Nome civil *</Label>
-          <Input
-            id="civil_name"
-            value={form.civil_name}
-            onChange={(e) => setForm({ ...form, civil_name: e.target.value })}
-            required
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="orunko">Orunkó</Label>
-          <Input
-            id="orunko"
-            value={form.orunko}
-            onChange={(e) => setForm({ ...form, orunko: e.target.value })}
-          />
-        </div>
-        {isSacerdote && (
+
+      {step === "edit" ? (
+        <form onSubmit={goPreview} className="space-y-3">
           <div className="space-y-1.5">
-            <Label htmlFor="orixa_vodun">
-              Orixá / Vodun <span className="text-xs text-muted-foreground">(restrito)</span>
-            </Label>
+            <Label htmlFor="civil_name">Nome civil *</Label>
             <Input
-              id="orixa_vodun"
-              value={form.orixa_vodun}
-              onChange={(e) => setForm({ ...form, orixa_vodun: e.target.value })}
-            />
-          </div>
-        )}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <Label htmlFor="role_title">Cargo / função</Label>
-            <Input
-              id="role_title"
-              value={form.role_title}
-              onChange={(e) => setForm({ ...form, role_title: e.target.value })}
+              id="civil_name"
+              value={form.civil_name}
+              onChange={(e) => setForm({ ...form, civil_name: e.target.value })}
+              required
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="phone">Telefone</Label>
+            <Label htmlFor="orunko">Orunkó</Label>
             <Input
-              id="phone"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              id="orunko"
+              value={form.orunko}
+              onChange={(e) => setForm({ ...form, orunko: e.target.value })}
             />
           </div>
+          {isSacerdote && (
+            <div className="space-y-1.5">
+              <Label htmlFor="orixa_vodun">
+                Orixá / Vodun <span className="text-xs text-muted-foreground">(restrito)</span>
+              </Label>
+              <Input
+                id="orixa_vodun"
+                value={form.orixa_vodun}
+                onChange={(e) => setForm({ ...form, orixa_vodun: e.target.value })}
+              />
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="role_title">Cargo / função</Label>
+              <Input
+                id="role_title"
+                value={form.role_title}
+                onChange={(e) => setForm({ ...form, role_title: e.target.value })}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="phone">Telefone</Label>
+              <Input
+                id="phone"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="entry_date">Data de entrada</Label>
+            <Input
+              id="entry_date"
+              type="date"
+              value={form.entry_date}
+              onChange={(e) => setForm({ ...form, entry_date: e.target.value })}
+            />
+          </div>
+          <DialogFooter className="gap-2 pt-2">
+            <Button type="button" variant="ghost" onClick={onClose}>
+              Cancelar
+            </Button>
+            <Button type="submit" className="bg-gradient-primary">
+              Revisar
+            </Button>
+          </DialogFooter>
+        </form>
+      ) : (
+        <div className="space-y-4">
+          <p className="text-xs text-muted-foreground">
+            Confira os dados antes de {member ? "salvar" : "cadastrar"}. Você pode voltar e ajustar se algo estiver errado.
+          </p>
+
+          <Card className="overflow-hidden border-bessem/30 shadow-soft">
+            <div className="bg-bessem-soft p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground shadow-glow">
+                  <UserIcon className="h-6 w-6" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-base font-semibold">{form.civil_name.trim()}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {form.orunko.trim() || "Sem Orunkó"}
+                    {form.role_title.trim() ? ` · ${form.role_title.trim()}` : ""}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="divide-y divide-border/60">
+              <PreviewRow
+                icon={Sparkles}
+                label="Orunkó"
+                value={form.orunko.trim() || "—"}
+                highlight
+              />
+              <PreviewRow
+                icon={UserIcon}
+                label="Cargo / função"
+                value={form.role_title.trim() || "—"}
+                highlight
+              />
+              {isSacerdote && (
+                <PreviewRow
+                  icon={Sparkles}
+                  label="Orixá / Vodun"
+                  value={form.orixa_vodun.trim() || "—"}
+                />
+              )}
+              <PreviewRow
+                icon={Phone}
+                label="Telefone"
+                value={form.phone.trim() || "—"}
+              />
+              <PreviewRow
+                icon={Calendar}
+                label="Data de entrada"
+                value={
+                  form.entry_date
+                    ? format(new Date(form.entry_date + "T00:00:00"), "dd 'de' MMMM 'de' yyyy", {
+                        locale: ptBR,
+                      })
+                    : "—"
+                }
+              />
+            </div>
+          </Card>
+
+          <DialogFooter className="gap-2 pt-2">
+            <Button type="button" variant="ghost" onClick={() => setStep("edit")}>
+              <Pencil className="mr-1 h-4 w-4" /> Editar
+            </Button>
+            <Button
+              type="button"
+              onClick={confirm}
+              disabled={saving}
+              className="bg-gradient-primary shadow-glow"
+            >
+              {saving ? "Salvando…" : member ? "Confirmar alterações" : "Confirmar cadastro"}
+            </Button>
+          </DialogFooter>
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="entry_date">Data de entrada</Label>
-          <Input
-            id="entry_date"
-            type="date"
-            value={form.entry_date}
-            onChange={(e) => setForm({ ...form, entry_date: e.target.value })}
-          />
-        </div>
-        <DialogFooter className="gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button type="submit" disabled={saving} className="bg-gradient-primary">
-            {saving ? "Salvando…" : "Salvar"}
-          </Button>
-        </DialogFooter>
-      </form>
+      )}
     </DialogContent>
+  );
+}
+
+function PreviewRow({
+  icon: Icon,
+  label,
+  value,
+  highlight,
+}: {
+  icon: typeof UserIcon;
+  label: string;
+  value: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 px-4 py-3">
+      <div
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+          highlight ? "bg-bessem-soft text-primary" : "bg-muted text-muted-foreground"
+        }`}
+      >
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className={`truncate text-sm ${highlight ? "font-semibold" : ""}`}>{value}</p>
+      </div>
+    </div>
   );
 }
