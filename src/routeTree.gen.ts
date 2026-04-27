@@ -12,6 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppPresencaRouteImport } from './routes/app.presenca'
+import { Route as AppMembrosRouteImport } from './routes/app.membros'
+import { Route as AppCalendarioRouteImport } from './routes/app.calendario'
+import { Route as AppAvisosRouteImport } from './routes/app.avisos'
+import { Route as AppMembrosIdRouteImport } from './routes/app.membros.$id'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -28,34 +34,108 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPresencaRoute = AppPresencaRouteImport.update({
+  id: '/presenca',
+  path: '/presenca',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMembrosRoute = AppMembrosRouteImport.update({
+  id: '/membros',
+  path: '/membros',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarioRoute = AppCalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAvisosRoute = AppAvisosRouteImport.update({
+  id: '/avisos',
+  path: '/avisos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMembrosIdRoute = AppMembrosIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppMembrosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/app/avisos': typeof AppAvisosRoute
+  '/app/calendario': typeof AppCalendarioRoute
+  '/app/membros': typeof AppMembrosRouteWithChildren
+  '/app/presenca': typeof AppPresencaRoute
+  '/app/': typeof AppIndexRoute
+  '/app/membros/$id': typeof AppMembrosIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
   '/login': typeof LoginRoute
+  '/app/avisos': typeof AppAvisosRoute
+  '/app/calendario': typeof AppCalendarioRoute
+  '/app/membros': typeof AppMembrosRouteWithChildren
+  '/app/presenca': typeof AppPresencaRoute
+  '/app': typeof AppIndexRoute
+  '/app/membros/$id': typeof AppMembrosIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/app/avisos': typeof AppAvisosRoute
+  '/app/calendario': typeof AppCalendarioRoute
+  '/app/membros': typeof AppMembrosRouteWithChildren
+  '/app/presenca': typeof AppPresencaRoute
+  '/app/': typeof AppIndexRoute
+  '/app/membros/$id': typeof AppMembrosIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/login'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/avisos'
+    | '/app/calendario'
+    | '/app/membros'
+    | '/app/presenca'
+    | '/app/'
+    | '/app/membros/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/login'
-  id: '__root__' | '/' | '/app' | '/login'
+  to:
+    | '/'
+    | '/login'
+    | '/app/avisos'
+    | '/app/calendario'
+    | '/app/membros'
+    | '/app/presenca'
+    | '/app'
+    | '/app/membros/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/avisos'
+    | '/app/calendario'
+    | '/app/membros'
+    | '/app/presenca'
+    | '/app/'
+    | '/app/membros/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRoute
+  AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
 }
 
@@ -82,12 +162,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/presenca': {
+      id: '/app/presenca'
+      path: '/presenca'
+      fullPath: '/app/presenca'
+      preLoaderRoute: typeof AppPresencaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/membros': {
+      id: '/app/membros'
+      path: '/membros'
+      fullPath: '/app/membros'
+      preLoaderRoute: typeof AppMembrosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/calendario': {
+      id: '/app/calendario'
+      path: '/calendario'
+      fullPath: '/app/calendario'
+      preLoaderRoute: typeof AppCalendarioRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/avisos': {
+      id: '/app/avisos'
+      path: '/avisos'
+      fullPath: '/app/avisos'
+      preLoaderRoute: typeof AppAvisosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/membros/$id': {
+      id: '/app/membros/$id'
+      path: '/$id'
+      fullPath: '/app/membros/$id'
+      preLoaderRoute: typeof AppMembrosIdRouteImport
+      parentRoute: typeof AppMembrosRoute
+    }
   }
 }
 
+interface AppMembrosRouteChildren {
+  AppMembrosIdRoute: typeof AppMembrosIdRoute
+}
+
+const AppMembrosRouteChildren: AppMembrosRouteChildren = {
+  AppMembrosIdRoute: AppMembrosIdRoute,
+}
+
+const AppMembrosRouteWithChildren = AppMembrosRoute._addFileChildren(
+  AppMembrosRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppAvisosRoute: typeof AppAvisosRoute
+  AppCalendarioRoute: typeof AppCalendarioRoute
+  AppMembrosRoute: typeof AppMembrosRouteWithChildren
+  AppPresencaRoute: typeof AppPresencaRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAvisosRoute: AppAvisosRoute,
+  AppCalendarioRoute: AppCalendarioRoute,
+  AppMembrosRoute: AppMembrosRouteWithChildren,
+  AppPresencaRoute: AppPresencaRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRoute: AppRoute,
+  AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
