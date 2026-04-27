@@ -3,13 +3,14 @@ import { Home, Users, CalendarDays, Megaphone, ClipboardCheck, LogOut } from "lu
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 
-const navItems = [
+type NavItem = { to: string; label: string; icon: typeof Home; exact?: boolean };
+const navItems: NavItem[] = [
   { to: "/app", label: "Início", icon: Home, exact: true },
   { to: "/app/membros", label: "Membros", icon: Users },
   { to: "/app/presenca", label: "Presença", icon: ClipboardCheck },
   { to: "/app/calendario", label: "Calendário", icon: CalendarDays },
   { to: "/app/avisos", label: "Avisos", icon: Megaphone },
-] as const;
+];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
