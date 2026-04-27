@@ -28,7 +28,7 @@ export const Route = createFileRoute("/app/membros/$id")({
 
 function MemberDetail() {
   const { id } = Route.useParams();
-  const { isSacerdote } = useAuth();
+  
   const navigate = useNavigate();
   const [member, setMember] = useState<any>(null);
   const [attendance, setAttendance] = useState<any[]>([]);
@@ -85,7 +85,7 @@ function MemberDetail() {
         </div>
 
         <div className="space-y-3 p-5">
-          {isSacerdote && member.orixa_vodun && (
+          {member.orixa_vodun && (
             <DetailRow label="Orixá / Vodun" value={member.orixa_vodun} />
           )}
           {member.phone && (
@@ -106,49 +106,47 @@ function MemberDetail() {
           )}
         </div>
 
-        {isSacerdote && (
-          <div className="flex gap-2 border-t border-border/60 p-3">
-            <Dialog open={editOpen} onOpenChange={setEditOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="flex-1">
-                  <Pencil className="mr-1 h-3.5 w-3.5" /> Editar
-                </Button>
-              </DialogTrigger>
-              <MemberDialog
-                member={member}
-                onClose={() => setEditOpen(false)}
-                onSaved={() => {
-                  setEditOpen(false);
-                  load();
-                }}
-              />
-            </Dialog>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" size="sm" className="text-destructive hover:bg-destructive/10">
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Remover este filho da casa?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta ação também removerá todo o histórico de presença associado.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleDelete}
-                    className="bg-destructive hover:bg-destructive/90"
-                  >
-                    Remover
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        )}
+        <div className="flex gap-2 border-t border-border/60 p-3">
+          <Dialog open={editOpen} onOpenChange={setEditOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="flex-1">
+                <Pencil className="mr-1 h-3.5 w-3.5" /> Editar
+              </Button>
+            </DialogTrigger>
+            <MemberDialog
+              member={member}
+              onClose={() => setEditOpen(false)}
+              onSaved={() => {
+                setEditOpen(false);
+                load();
+              }}
+            />
+          </Dialog>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="sm" className="text-destructive hover:bg-destructive/10">
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Remover este filho da casa?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta ação também removerá todo o histórico de presença associado.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-destructive hover:bg-destructive/90"
+                >
+                  Remover
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </Card>
 
       <section>
