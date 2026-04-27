@@ -60,7 +60,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
-                // @ts-expect-error - dynamic route literal
                 className={`flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors ${
                   active ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`}
