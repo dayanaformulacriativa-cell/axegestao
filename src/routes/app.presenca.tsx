@@ -24,7 +24,6 @@ export const Route = createFileRoute("/app/presenca")({
 });
 
 function AttendancePage() {
-  const { isSacerdote } = useAuth();
   const [members, setMembers] = useState<any[]>([]);
   const [memberId, setMemberId] = useState<string>("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -49,24 +48,6 @@ function AttendancePage() {
     })();
     loadRecent();
   }, []);
-
-  if (!isSacerdote) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold tracking-tight">Presença</h1>
-        <Card className="flex items-start gap-3 p-5 shadow-soft">
-          <Lock className="mt-0.5 h-5 w-5 text-muted-foreground" />
-          <div>
-            <p className="text-sm font-semibold">Apenas o sacerdote registra presenças</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Você consegue ver seu próprio histórico no seu perfil de membro.
-            </p>
-          </div>
-        </Card>
-        <RecentList recent={recent} />
-      </div>
-    );
-  }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
