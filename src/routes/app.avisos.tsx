@@ -140,7 +140,6 @@ function AnnouncementsPage() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  )}
                 </div>
                 <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/90">{a.content}</p>
               </div>
