@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
@@ -20,6 +21,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/membros")({
   component: MembersPage,
+  validateSearch: z.object({ novo: z.coerce.boolean().optional() }),
 });
 
 interface Member {
@@ -34,10 +36,15 @@ interface Member {
 
 function MembersPage() {
   const { isSacerdote } = useAuth();
+  const { novo } = Route.useSearch();
   const [members, setMembers] = useState<Member[]>([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (novo && isSacerdote) setOpen(true);
+  }, [novo, isSacerdote]);
 
   const load = async () => {
     setLoading(true);
