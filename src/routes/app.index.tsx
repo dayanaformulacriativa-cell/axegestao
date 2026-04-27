@@ -233,7 +233,7 @@ function QuickAction({
     <Link to={to}>
       <Button
         variant="outline"
-        className="flex h-auto w-full flex-col items-center gap-2 rounded-2xl border-border/60 bg-card py-4 shadow-soft hover:bg-accent"
+        className="flex h-auto w-full flex-col items-center gap-2 rounded-2xl border-border/60 bg-card py-4 shadow-soft hover:bg-accent border-solid"
       >
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-bessem-soft">
           <Icon className="h-4 w-4 text-primary" />
