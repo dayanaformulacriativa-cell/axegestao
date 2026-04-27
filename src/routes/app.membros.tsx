@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,7 +37,6 @@ interface Member {
 }
 
 function MembersPage() {
-  const { isSacerdote } = useAuth();
   const { novo } = Route.useSearch();
   const [members, setMembers] = useState<Member[]>([]);
   const [search, setSearch] = useState("");
@@ -45,8 +44,8 @@ function MembersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (novo && isSacerdote) setOpen(true);
-  }, [novo, isSacerdote]);
+    if (novo) setOpen(true);
+  }, [novo]);
 
   const load = async () => {
     setLoading(true);
@@ -81,22 +80,20 @@ function MembersPage() {
             {members.length} {members.length === 1 ? "pessoa" : "pessoas"}
           </p>
         </div>
-        {isSacerdote && (
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="rounded-full bg-gradient-primary shadow-glow">
-                <Plus className="mr-1 h-4 w-4" /> Novo
-              </Button>
-            </DialogTrigger>
-            <MemberDialog
-              onClose={() => setOpen(false)}
-              onSaved={() => {
-                setOpen(false);
-                load();
-              }}
-            />
-          </Dialog>
-        )}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="rounded-full bg-gradient-primary shadow-glow">
+              <Plus className="mr-1 h-4 w-4" /> Novo
+            </Button>
+          </DialogTrigger>
+          <MemberDialog
+            onClose={() => setOpen(false)}
+            onSaved={() => {
+              setOpen(false);
+              load();
+            }}
+          />
+        </Dialog>
       </header>
 
       <div className="relative">
@@ -121,7 +118,7 @@ function MembersPage() {
               ? "Sua casa ainda está vazia"
               : "Nenhum resultado para essa busca."}
           </p>
-          {members.length === 0 && isSacerdote && (
+          {members.length === 0 && (
             <>
               <p className="mt-1 text-xs text-muted-foreground">
                 Comece cadastrando o primeiro filho da casa, com Orunkó e cargo.
@@ -168,7 +165,7 @@ export function MemberDialog({
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const { isSacerdote } = useAuth();
+  
   const [form, setForm] = useState({
     civil_name: member?.civil_name ?? "",
     orunko: member?.orunko ?? "",
@@ -241,18 +238,14 @@ export function MemberDialog({
               onChange={(e) => setForm({ ...form, orunko: e.target.value })}
             />
           </div>
-          {isSacerdote && (
-            <div className="space-y-1.5">
-              <Label htmlFor="orixa_vodun">
-                Orixá / Vodun <span className="text-xs text-muted-foreground">(restrito)</span>
-              </Label>
-              <Input
-                id="orixa_vodun"
-                value={form.orixa_vodun}
-                onChange={(e) => setForm({ ...form, orixa_vodun: e.target.value })}
-              />
-            </div>
-          )}
+          <div className="space-y-1.5">
+            <Label htmlFor="orixa_vodun">Orixá / Vodun</Label>
+            <Input
+              id="orixa_vodun"
+              value={form.orixa_vodun}
+              onChange={(e) => setForm({ ...form, orixa_vodun: e.target.value })}
+            />
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="role_title">Cargo / função</Label>
@@ -324,13 +317,11 @@ export function MemberDialog({
                 value={form.role_title.trim() || "—"}
                 highlight
               />
-              {isSacerdote && (
-                <PreviewRow
-                  icon={Sparkles}
-                  label="Orixá / Vodun"
-                  value={form.orixa_vodun.trim() || "—"}
-                />
-              )}
+              <PreviewRow
+                icon={Sparkles}
+                label="Orixá / Vodun"
+                value={form.orixa_vodun.trim() || "—"}
+              />
               <PreviewRow
                 icon={Phone}
                 label="Telefone"

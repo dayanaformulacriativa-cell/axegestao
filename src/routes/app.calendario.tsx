@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,7 +44,6 @@ interface Event {
 }
 
 function CalendarPage() {
-  const { isSacerdote } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState(new Date());
@@ -70,22 +69,20 @@ function CalendarPage() {
           <h1 className="text-2xl font-bold tracking-tight">Calendário</h1>
           <p className="text-sm text-muted-foreground">Eventos da casa</p>
         </div>
-        {isSacerdote && (
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="rounded-full bg-gradient-primary shadow-glow">
-                <Plus className="mr-1 h-4 w-4" /> Novo
-              </Button>
-            </DialogTrigger>
-            <EventDialog
-              onClose={() => setOpen(false)}
-              onSaved={() => {
-                setOpen(false);
-                load();
-              }}
-            />
-          </Dialog>
-        )}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="rounded-full bg-gradient-primary shadow-glow">
+              <Plus className="mr-1 h-4 w-4" /> Novo
+            </Button>
+          </DialogTrigger>
+          <EventDialog
+            onClose={() => setOpen(false)}
+            onSaved={() => {
+              setOpen(false);
+              load();
+            }}
+          />
+        </Dialog>
       </header>
 
       <MiniCalendar month={month} setMonth={setMonth} events={events} />
@@ -101,7 +98,7 @@ function CalendarPage() {
         ) : (
           <div className="space-y-2">
             {upcoming.map((ev) => (
-              <EventCard key={ev.id} event={ev} canEdit={isSacerdote} onChanged={load} />
+              <EventCard key={ev.id} event={ev} canEdit={true} onChanged={load} />
             ))}
           </div>
         )}

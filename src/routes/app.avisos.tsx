@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,7 +43,6 @@ interface Announcement {
 }
 
 function AnnouncementsPage() {
-  const { isSacerdote } = useAuth();
   const [items, setItems] = useState<Announcement[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -66,22 +65,20 @@ function AnnouncementsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Avisos</h1>
           <p className="text-sm text-muted-foreground">Comunicados da casa</p>
         </div>
-        {isSacerdote && (
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="rounded-full bg-gradient-primary shadow-glow">
-                <Plus className="mr-1 h-4 w-4" /> Novo
-              </Button>
-            </DialogTrigger>
-            <NewAnnouncementDialog
-              onClose={() => setOpen(false)}
-              onSaved={() => {
-                setOpen(false);
-                load();
-              }}
-            />
-          </Dialog>
-        )}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="rounded-full bg-gradient-primary shadow-glow">
+              <Plus className="mr-1 h-4 w-4" /> Novo
+            </Button>
+          </DialogTrigger>
+          <NewAnnouncementDialog
+            onClose={() => setOpen(false)}
+            onSaved={() => {
+              setOpen(false);
+              load();
+            }}
+          />
+        </Dialog>
       </header>
 
       {items.length === 0 ? (
@@ -105,8 +102,7 @@ function AnnouncementsPage() {
                       })}
                     </p>
                   </div>
-                  {isSacerdote && (
-                    <AlertDialog>
+                  <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
                           variant="ghost"
@@ -144,7 +140,6 @@ function AnnouncementsPage() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  )}
                 </div>
                 <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/90">{a.content}</p>
               </div>
