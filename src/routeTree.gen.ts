@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppReceitasRouteImport } from './routes/app.receitas'
 import { Route as AppPresencaRouteImport } from './routes/app.presenca'
+import { Route as AppPermissoesRouteImport } from './routes/app.permissoes'
 import { Route as AppMembrosRouteImport } from './routes/app.membros'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppCozinhaRouteImport } from './routes/app.cozinha'
@@ -50,6 +51,11 @@ const AppReceitasRoute = AppReceitasRouteImport.update({
 const AppPresencaRoute = AppPresencaRouteImport.update({
   id: '/presenca',
   path: '/presenca',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPermissoesRoute = AppPermissoesRouteImport.update({
+  id: '/permissoes',
+  path: '/permissoes',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMembrosRoute = AppMembrosRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/app/cozinha': typeof AppCozinhaRoute
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
+  '/app/permissoes': typeof AppPermissoesRoute
   '/app/presenca': typeof AppPresencaRoute
   '/app/receitas': typeof AppReceitasRoute
   '/app/': typeof AppIndexRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/app/cozinha': typeof AppCozinhaRoute
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
+  '/app/permissoes': typeof AppPermissoesRoute
   '/app/presenca': typeof AppPresencaRoute
   '/app/receitas': typeof AppReceitasRoute
   '/app': typeof AppIndexRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/app/cozinha': typeof AppCozinhaRoute
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
+  '/app/permissoes': typeof AppPermissoesRoute
   '/app/presenca': typeof AppPresencaRoute
   '/app/receitas': typeof AppReceitasRoute
   '/app/': typeof AppIndexRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/app/cozinha'
     | '/app/financeiro'
     | '/app/membros'
+    | '/app/permissoes'
     | '/app/presenca'
     | '/app/receitas'
     | '/app/'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/app/cozinha'
     | '/app/financeiro'
     | '/app/membros'
+    | '/app/permissoes'
     | '/app/presenca'
     | '/app/receitas'
     | '/app'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/app/cozinha'
     | '/app/financeiro'
     | '/app/membros'
+    | '/app/permissoes'
     | '/app/presenca'
     | '/app/receitas'
     | '/app/'
@@ -217,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/presenca'
       fullPath: '/app/presenca'
       preLoaderRoute: typeof AppPresencaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/permissoes': {
+      id: '/app/permissoes'
+      path: '/permissoes'
+      fullPath: '/app/permissoes'
+      preLoaderRoute: typeof AppPermissoesRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/membros': {
@@ -282,6 +301,7 @@ interface AppRouteChildren {
   AppCozinhaRoute: typeof AppCozinhaRoute
   AppFinanceiroRoute: typeof AppFinanceiroRoute
   AppMembrosRoute: typeof AppMembrosRouteWithChildren
+  AppPermissoesRoute: typeof AppPermissoesRoute
   AppPresencaRoute: typeof AppPresencaRoute
   AppReceitasRoute: typeof AppReceitasRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -293,6 +313,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCozinhaRoute: AppCozinhaRoute,
   AppFinanceiroRoute: AppFinanceiroRoute,
   AppMembrosRoute: AppMembrosRouteWithChildren,
+  AppPermissoesRoute: AppPermissoesRoute,
   AppPresencaRoute: AppPresencaRoute,
   AppReceitasRoute: AppReceitasRoute,
   AppIndexRoute: AppIndexRoute,
