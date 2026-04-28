@@ -414,13 +414,15 @@ function RecipesList({
                   )}
                 </div>
               </div>
-              <DeleteBtn
-                onConfirm={async () => {
-                  await supabase.from("kitchen_recipes").delete().eq("id", r.id);
-                  toast.success("Receita removida");
-                  onChanged();
-                }}
-              />
+              {canManage && (
+                <DeleteBtn
+                  onConfirm={async () => {
+                    await supabase.from("kitchen_recipes").delete().eq("id", r.id);
+                    toast.success("Receita removida");
+                    onChanged();
+                  }}
+                />
+              )}
             </div>
           </Card>
         ))
