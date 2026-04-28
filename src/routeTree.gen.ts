@@ -13,7 +13,6 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
-import { Route as AppReceitasRouteImport } from './routes/app.receitas'
 import { Route as AppPresencaRouteImport } from './routes/app.presenca'
 import { Route as AppMembrosRouteImport } from './routes/app.membros'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
@@ -40,11 +39,6 @@ const IndexRoute = IndexRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppReceitasRoute = AppReceitasRouteImport.update({
-  id: '/receitas',
-  path: '/receitas',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPresencaRoute = AppPresencaRouteImport.update({
@@ -93,7 +87,6 @@ export interface FileRoutesByFullPath {
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
   '/app/presenca': typeof AppPresencaRoute
-  '/app/receitas': typeof AppReceitasRoute
   '/app/': typeof AppIndexRoute
   '/app/membros/$id': typeof AppMembrosIdRoute
 }
@@ -106,7 +99,6 @@ export interface FileRoutesByTo {
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
   '/app/presenca': typeof AppPresencaRoute
-  '/app/receitas': typeof AppReceitasRoute
   '/app': typeof AppIndexRoute
   '/app/membros/$id': typeof AppMembrosIdRoute
 }
@@ -121,7 +113,6 @@ export interface FileRoutesById {
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
   '/app/presenca': typeof AppPresencaRoute
-  '/app/receitas': typeof AppReceitasRoute
   '/app/': typeof AppIndexRoute
   '/app/membros/$id': typeof AppMembrosIdRoute
 }
@@ -137,7 +128,6 @@ export interface FileRouteTypes {
     | '/app/financeiro'
     | '/app/membros'
     | '/app/presenca'
-    | '/app/receitas'
     | '/app/'
     | '/app/membros/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -150,7 +140,6 @@ export interface FileRouteTypes {
     | '/app/financeiro'
     | '/app/membros'
     | '/app/presenca'
-    | '/app/receitas'
     | '/app'
     | '/app/membros/$id'
   id:
@@ -164,7 +153,6 @@ export interface FileRouteTypes {
     | '/app/financeiro'
     | '/app/membros'
     | '/app/presenca'
-    | '/app/receitas'
     | '/app/'
     | '/app/membros/$id'
   fileRoutesById: FileRoutesById
@@ -203,13 +191,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/receitas': {
-      id: '/app/receitas'
-      path: '/receitas'
-      fullPath: '/app/receitas'
-      preLoaderRoute: typeof AppReceitasRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/presenca': {
@@ -283,7 +264,6 @@ interface AppRouteChildren {
   AppFinanceiroRoute: typeof AppFinanceiroRoute
   AppMembrosRoute: typeof AppMembrosRouteWithChildren
   AppPresencaRoute: typeof AppPresencaRoute
-  AppReceitasRoute: typeof AppReceitasRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
@@ -294,7 +274,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppFinanceiroRoute: AppFinanceiroRoute,
   AppMembrosRoute: AppMembrosRouteWithChildren,
   AppPresencaRoute: AppPresencaRoute,
-  AppReceitasRoute: AppReceitasRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
