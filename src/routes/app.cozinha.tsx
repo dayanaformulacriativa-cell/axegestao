@@ -320,10 +320,12 @@ function RecipesList({
   recipes,
   loading,
   onChanged,
+  canManage,
 }: {
   recipes: Recipe[];
   loading: boolean;
   onChanged: () => void;
+  canManage: boolean;
 }) {
   const [search, setSearch] = useState("");
   const [orixaFilter, setOrixaFilter] = useState<string>("all");
