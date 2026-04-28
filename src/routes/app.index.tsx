@@ -125,6 +125,7 @@ function Dashboard() {
         <div className="grid grid-cols-3 gap-3">
           <QuickAction to="/app/presenca" icon={ClipboardCheck} label="Registrar presença" />
           <QuickAction to="/app/financeiro" icon={Wallet} label="Financeiro" />
+          <QuickAction to="/app/permissoes" icon={ShieldCheck} label="Permissões" />
           {isSacerdote && (
             <QuickAction to="/app/calendario" icon={CalendarDays} label="Criar evento" />
           )}
