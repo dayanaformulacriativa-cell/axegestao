@@ -105,6 +105,7 @@ const MEAL_TYPES: Record<string, string> = {
 const UNITS = ["kg", "g", "l", "ml", "un", "pct", "dz"];
 
 function KitchenPage() {
+  const { isSacerdote } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
   const [meals, setMeals] = useState<Meal[]>([]);
   const [helpers, setHelpers] = useState<Helper[]>([]);
