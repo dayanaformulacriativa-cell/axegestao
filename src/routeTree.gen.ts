@@ -16,6 +16,7 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppPresencaRouteImport } from './routes/app.presenca'
 import { Route as AppMembrosRouteImport } from './routes/app.membros'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
+import { Route as AppCozinhaRouteImport } from './routes/app.cozinha'
 import { Route as AppCalendarioRouteImport } from './routes/app.calendario'
 import { Route as AppAvisosRouteImport } from './routes/app.avisos'
 import { Route as AppMembrosIdRouteImport } from './routes/app.membros.$id'
@@ -55,6 +56,11 @@ const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
   path: '/financeiro',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCozinhaRoute = AppCozinhaRouteImport.update({
+  id: '/cozinha',
+  path: '/cozinha',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCalendarioRoute = AppCalendarioRouteImport.update({
   id: '/calendario',
   path: '/calendario',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/app/avisos': typeof AppAvisosRoute
   '/app/calendario': typeof AppCalendarioRoute
+  '/app/cozinha': typeof AppCozinhaRoute
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
   '/app/presenca': typeof AppPresencaRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/app/avisos': typeof AppAvisosRoute
   '/app/calendario': typeof AppCalendarioRoute
+  '/app/cozinha': typeof AppCozinhaRoute
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
   '/app/presenca': typeof AppPresencaRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/app/avisos': typeof AppAvisosRoute
   '/app/calendario': typeof AppCalendarioRoute
+  '/app/cozinha': typeof AppCozinhaRoute
   '/app/financeiro': typeof AppFinanceiroRoute
   '/app/membros': typeof AppMembrosRouteWithChildren
   '/app/presenca': typeof AppPresencaRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/avisos'
     | '/app/calendario'
+    | '/app/cozinha'
     | '/app/financeiro'
     | '/app/membros'
     | '/app/presenca'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/avisos'
     | '/app/calendario'
+    | '/app/cozinha'
     | '/app/financeiro'
     | '/app/membros'
     | '/app/presenca'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/avisos'
     | '/app/calendario'
+    | '/app/cozinha'
     | '/app/financeiro'
     | '/app/membros'
     | '/app/presenca'
@@ -202,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinanceiroRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/cozinha': {
+      id: '/app/cozinha'
+      path: '/cozinha'
+      fullPath: '/app/cozinha'
+      preLoaderRoute: typeof AppCozinhaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/calendario': {
       id: '/app/calendario'
       path: '/calendario'
@@ -241,6 +260,7 @@ const AppMembrosRouteWithChildren = AppMembrosRoute._addFileChildren(
 interface AppRouteChildren {
   AppAvisosRoute: typeof AppAvisosRoute
   AppCalendarioRoute: typeof AppCalendarioRoute
+  AppCozinhaRoute: typeof AppCozinhaRoute
   AppFinanceiroRoute: typeof AppFinanceiroRoute
   AppMembrosRoute: typeof AppMembrosRouteWithChildren
   AppPresencaRoute: typeof AppPresencaRoute
@@ -250,6 +270,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAvisosRoute: AppAvisosRoute,
   AppCalendarioRoute: AppCalendarioRoute,
+  AppCozinhaRoute: AppCozinhaRoute,
   AppFinanceiroRoute: AppFinanceiroRoute,
   AppMembrosRoute: AppMembrosRouteWithChildren,
   AppPresencaRoute: AppPresencaRoute,
