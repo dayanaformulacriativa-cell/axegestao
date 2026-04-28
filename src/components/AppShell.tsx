@@ -8,7 +8,8 @@ const navItems: NavItem[] = [
   { to: "/app", label: "Início", icon: Home, exact: true },
   { to: "/app/membros", label: "Membros", icon: Users },
   { to: "/app/presenca", label: "Presença", icon: ClipboardCheck },
-  { to: "/app/calendario", label: "Calendário", icon: CalendarDays },
+  { to: "/app/financeiro", label: "Financeiro", icon: Wallet },
+  { to: "/app/calendario", label: "Agenda", icon: CalendarDays },
   { to: "/app/avisos", label: "Avisos", icon: Megaphone },
 ];
 
