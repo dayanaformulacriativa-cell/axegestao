@@ -11,6 +11,7 @@ import {
   ClipboardCheck,
   Plus,
   Sparkles,
+  Wallet,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -122,6 +123,7 @@ function Dashboard() {
         </h2>
         <div className="grid grid-cols-3 gap-3">
           <QuickAction to="/app/presenca" icon={ClipboardCheck} label="Registrar presença" />
+          <QuickAction to="/app/financeiro" icon={Wallet} label="Financeiro" />
           {isSacerdote && (
             <QuickAction to="/app/calendario" icon={CalendarDays} label="Criar evento" />
           )}

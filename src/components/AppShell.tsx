@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Home, Users, CalendarDays, Megaphone, ClipboardCheck, LogOut } from "lucide-react";
+import { Home, Users, CalendarDays, Megaphone, ClipboardCheck, LogOut, Wallet } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +8,8 @@ const navItems: NavItem[] = [
   { to: "/app", label: "Início", icon: Home, exact: true },
   { to: "/app/membros", label: "Membros", icon: Users },
   { to: "/app/presenca", label: "Presença", icon: ClipboardCheck },
-  { to: "/app/calendario", label: "Calendário", icon: CalendarDays },
+  { to: "/app/financeiro", label: "Financeiro", icon: Wallet },
+  { to: "/app/calendario", label: "Agenda", icon: CalendarDays },
   { to: "/app/avisos", label: "Avisos", icon: Megaphone },
 ];
 
@@ -50,7 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Bottom navigation */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border/60 bg-background/95 backdrop-blur-md">
-        <div className="mx-auto grid max-w-2xl grid-cols-5">
+        <div className="mx-auto grid max-w-2xl grid-cols-6">
           {navItems.map((item) => {
             const active = item.exact
               ? location.pathname === item.to
