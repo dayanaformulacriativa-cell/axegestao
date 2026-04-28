@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -295,67 +295,127 @@ function KitchenPage() {
           <Card className="rounded-2xl border-bessem/30 bg-bessem/5 p-3 text-xs text-muted-foreground">
             Receitas tradicionais do <span className="font-semibold text-foreground">Candomblé Djeje Nagô Vodun Kpodagba</span>.
           </Card>
-          {loading ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Carregando...</p>
-          ) : recipes.length === 0 ? (
-            <Card className="rounded-2xl p-6 text-center text-sm text-muted-foreground">
-              Nenhuma receita cadastrada ainda.
-            </Card>
-          ) : (
-            recipes.map((r) => (
-              <Card key={r.id} className="rounded-2xl border-border/60 p-4 shadow-soft">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-sm font-semibold">{r.name}</h3>
-                      {r.orixa_vodun && (
-                        <Badge variant="secondary" className="text-[10px]">
-                          {r.orixa_vodun}
-                        </Badge>
-                      )}
-                    </div>
-                    {r.tradition && (
-                      <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                        {r.tradition}
-                      </p>
-                    )}
-                    <div className="mt-3 space-y-2">
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase text-muted-foreground">
-                          Ingredientes
-                        </p>
-                        <p className="whitespace-pre-wrap text-xs">{r.ingredients}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase text-muted-foreground">
-                          Modo de preparo
-                        </p>
-                        <p className="whitespace-pre-wrap text-xs">{r.instructions}</p>
-                      </div>
-                      {r.notes && (
-                        <div>
-                          <p className="text-[10px] font-semibold uppercase text-muted-foreground">
-                            Observações
-                          </p>
-                          <p className="whitespace-pre-wrap text-xs">{r.notes}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <DeleteBtn
-                    onConfirm={async () => {
-                      await supabase.from("kitchen_recipes").delete().eq("id", r.id);
-                      toast.success("Receita removida");
-                      loadAll();
-                    }}
-                  />
-                </div>
-              </Card>
-            ))
-          )}
+          <Link
+            to="/app/receitas"
+            className="block rounded-xl border border-border/60 bg-card p-3 text-xs shadow-soft hover:bg-accent"
+          >
+            <span className="font-medium text-foreground">📖 Ver receitas agrupadas por Orixá / Vodun →</span>
+          </Link>
+          <RecipesList recipes={recipes} loading={loading} onChanged={loadAll} />
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+function RecipesList({
+  recipes,
+  loading,
+  onChanged,
+}: {
+  recipes: Recipe[];
+  loading: boolean;
+  onChanged: () => void;
+}) {
+  const [search, setSearch] = useState("");
+  const [orixaFilter, setOrixaFilter] = useState<string>("all");
+
+  const orixas = useMemo(() => {
+    const set = new Set<string>();
+    recipes.forEach((r) => r.orixa_vodun && set.add(r.orixa_vodun));
+    return Array.from(set).sort();
+  }, [recipes]);
+
+  const filtered = useMemo(() => {
+    return recipes.filter((r) => {
+      if (orixaFilter !== "all" && r.orixa_vodun !== orixaFilter) return false;
+      if (search && !r.name.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+  }, [recipes, search, orixaFilter]);
+
+  return (
+    <>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <Input
+          placeholder="Buscar receita..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Select value={orixaFilter} onValueChange={setOrixaFilter}>
+          <SelectTrigger>
+            <SelectValue placeholder="Filtrar por Orixá / Vodun" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os Orixás / Voduns</SelectItem>
+            {orixas.map((o) => (
+              <SelectItem key={o} value={o}>
+                {o}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {loading ? (
+        <p className="py-8 text-center text-sm text-muted-foreground">Carregando...</p>
+      ) : filtered.length === 0 ? (
+        <Card className="rounded-2xl p-6 text-center text-sm text-muted-foreground">
+          Nenhuma receita encontrada.
+        </Card>
+      ) : (
+        filtered.map((r) => (
+          <Card key={r.id} className="rounded-2xl border-border/60 p-4 shadow-soft">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-sm font-semibold">{r.name}</h3>
+                  {r.orixa_vodun && (
+                    <Badge variant="secondary" className="text-[10px]">
+                      {r.orixa_vodun}
+                    </Badge>
+                  )}
+                </div>
+                {r.tradition && (
+                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                    {r.tradition}
+                  </p>
+                )}
+                <div className="mt-3 space-y-2">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase text-muted-foreground">
+                      Ingredientes
+                    </p>
+                    <p className="whitespace-pre-wrap text-xs">{r.ingredients}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase text-muted-foreground">
+                      Modo de preparo
+                    </p>
+                    <p className="whitespace-pre-wrap text-xs">{r.instructions}</p>
+                  </div>
+                  {r.notes && (
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase text-muted-foreground">
+                        Observações
+                      </p>
+                      <p className="whitespace-pre-wrap text-xs">{r.notes}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <DeleteBtn
+                onConfirm={async () => {
+                  await supabase.from("kitchen_recipes").delete().eq("id", r.id);
+                  toast.success("Receita removida");
+                  onChanged();
+                }}
+              />
+            </div>
+          </Card>
+        ))
+      )}
+    </>
   );
 }
 
