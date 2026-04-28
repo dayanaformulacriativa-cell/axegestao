@@ -212,6 +212,170 @@ export type Database = {
           },
         ]
       }
+      kitchen_meal_helpers: {
+        Row: {
+          created_at: string
+          id: string
+          meal_id: string
+          member_id: string
+          task: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          meal_id: string
+          member_id: string
+          task?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          meal_id?: string
+          member_id?: string
+          task?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kitchen_meal_helpers_meal_id_fkey"
+            columns: ["meal_id"]
+            isOneToOne: false
+            referencedRelation: "kitchen_meals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kitchen_meal_helpers_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kitchen_meals: {
+        Row: {
+          coordinator_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          meal_date: string
+          meal_time: string | null
+          meal_type: string
+          menu: string | null
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          coordinator_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          meal_date?: string
+          meal_time?: string | null
+          meal_type: string
+          menu?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          coordinator_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          meal_date?: string
+          meal_time?: string | null
+          meal_type?: string
+          menu?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kitchen_meals_coordinator_id_fkey"
+            columns: ["coordinator_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kitchen_pantry: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          item_name: string
+          movement_date: string
+          movement_type: string
+          notes: string | null
+          quantity: number
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          item_name: string
+          movement_date?: string
+          movement_type: string
+          notes?: string | null
+          quantity?: number
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          item_name?: string
+          movement_date?: string
+          movement_type?: string
+          notes?: string | null
+          quantity?: number
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      kitchen_recipes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          ingredients: string
+          instructions: string
+          name: string
+          notes: string | null
+          orixa_vodun: string | null
+          tradition: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          ingredients: string
+          instructions: string
+          name: string
+          notes?: string | null
+          orixa_vodun?: string | null
+          tradition?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          ingredients?: string
+          instructions?: string
+          name?: string
+          notes?: string | null
+          orixa_vodun?: string | null
+          tradition?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       members: {
         Row: {
           civil_name: string
