@@ -49,7 +49,6 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
-import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/app/cozinha")({
   component: KitchenPage,
@@ -105,7 +104,6 @@ const MEAL_TYPES: Record<string, string> = {
 const UNITS = ["kg", "g", "l", "ml", "un", "pct", "dz"];
 
 function KitchenPage() {
-  const { isSacerdote } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
   const [meals, setMeals] = useState<Meal[]>([]);
   const [helpers, setHelpers] = useState<Helper[]>([]);
@@ -293,13 +291,7 @@ function KitchenPage() {
 
         {/* ============ RECEITAS ============ */}
         <TabsContent value="recipes" className="space-y-3">
-          {isSacerdote ? (
-            <RecipeForm onSaved={loadAll} />
-          ) : (
-            <Card className="rounded-2xl border-border/60 bg-muted/40 p-3 text-center text-xs text-muted-foreground">
-              Apenas o sacerdote pode cadastrar, editar ou remover receitas.
-            </Card>
-          )}
+          <RecipeForm onSaved={loadAll} />
           <Card className="rounded-2xl border-bessem/30 bg-bessem/5 p-3 text-xs text-muted-foreground">
             Receitas tradicionais do <span className="font-semibold text-foreground">Candomblé Djeje Nagô Vodun Kpodagba</span>.
           </Card>
@@ -309,7 +301,7 @@ function KitchenPage() {
           >
             <span className="font-medium text-foreground">📖 Ver receitas agrupadas por Orixá / Vodun →</span>
           </Link>
-          <RecipesList recipes={recipes} loading={loading} onChanged={loadAll} canManage={isSacerdote} />
+          <RecipesList recipes={recipes} loading={loading} onChanged={loadAll} />
         </TabsContent>
       </Tabs>
     </div>
@@ -320,12 +312,10 @@ function RecipesList({
   recipes,
   loading,
   onChanged,
-  canManage,
 }: {
   recipes: Recipe[];
   loading: boolean;
   onChanged: () => void;
-  canManage: boolean;
 }) {
   const [search, setSearch] = useState("");
   const [orixaFilter, setOrixaFilter] = useState<string>("all");
@@ -414,15 +404,13 @@ function RecipesList({
                   )}
                 </div>
               </div>
-              {canManage && (
-                <DeleteBtn
-                  onConfirm={async () => {
-                    await supabase.from("kitchen_recipes").delete().eq("id", r.id);
-                    toast.success("Receita removida");
-                    onChanged();
-                  }}
-                />
-              )}
+              <DeleteBtn
+                onConfirm={async () => {
+                  await supabase.from("kitchen_recipes").delete().eq("id", r.id);
+                  toast.success("Receita removida");
+                  onChanged();
+                }}
+              />
             </div>
           </Card>
         ))
