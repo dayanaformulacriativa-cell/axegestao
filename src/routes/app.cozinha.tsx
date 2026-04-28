@@ -293,7 +293,13 @@ function KitchenPage() {
 
         {/* ============ RECEITAS ============ */}
         <TabsContent value="recipes" className="space-y-3">
-          <RecipeForm onSaved={loadAll} />
+          {isSacerdote ? (
+            <RecipeForm onSaved={loadAll} />
+          ) : (
+            <Card className="rounded-2xl border-border/60 bg-muted/40 p-3 text-center text-xs text-muted-foreground">
+              Apenas o sacerdote pode cadastrar, editar ou remover receitas.
+            </Card>
+          )}
           <Card className="rounded-2xl border-bessem/30 bg-bessem/5 p-3 text-xs text-muted-foreground">
             Receitas tradicionais do <span className="font-semibold text-foreground">Candomblé Djeje Nagô Vodun Kpodagba</span>.
           </Card>
@@ -303,7 +309,7 @@ function KitchenPage() {
           >
             <span className="font-medium text-foreground">📖 Ver receitas agrupadas por Orixá / Vodun →</span>
           </Link>
-          <RecipesList recipes={recipes} loading={loading} onChanged={loadAll} />
+          <RecipesList recipes={recipes} loading={loading} onChanged={loadAll} canManage={isSacerdote} />
         </TabsContent>
       </Tabs>
     </div>
