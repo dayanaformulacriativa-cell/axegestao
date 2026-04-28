@@ -51,7 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Bottom navigation */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border/60 bg-background/95 backdrop-blur-md">
-        <div className="mx-auto grid max-w-2xl grid-cols-5">
+        <div className="mx-auto grid max-w-2xl grid-cols-6">
           {navItems.map((item) => {
             const active = item.exact
               ? location.pathname === item.to
