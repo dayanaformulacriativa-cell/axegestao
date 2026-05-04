@@ -5,7 +5,6 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
@@ -16,22 +15,14 @@ const loginSchema = z.object({
   email: z.string().trim().email("E-mail inválido").max(255),
   password: z.string().min(6, "Mínimo de 6 caracteres").max(100),
 });
-const signupSchema = loginSchema.extend({
-  displayName: z.string().trim().min(2, "Informe seu nome").max(80),
-});
 
 function LoginPage() {
-  const { user, loading, signIn, signUp } = useAuth();
+  const { user, loading, signIn } = useAuth();
   const navigate = useNavigate();
-  const [tab, setTab] = useState("login");
   const [submitting, setSubmitting] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-
-  const [signupName, setSignupName] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
 
   if (!loading && user) return <Navigate to="/app" />;
 
@@ -47,28 +38,6 @@ function LoginPage() {
     setSubmitting(false);
     if (error) toast.error("Não foi possível entrar", { description: error });
     else navigate({ to: "/app" });
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsed = signupSchema.safeParse({
-      email: signupEmail,
-      password: signupPassword,
-      displayName: signupName,
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
-      return;
-    }
-    setSubmitting(true);
-    const { error } = await signUp(parsed.data.email, parsed.data.password, parsed.data.displayName);
-    setSubmitting(false);
-    if (error) toast.error("Não foi possível cadastrar", { description: error });
-    else {
-      toast.success("Conta criada! Entrando…");
-      await signIn(parsed.data.email, parsed.data.password);
-      navigate({ to: "/app" });
-    }
   };
 
   return (
