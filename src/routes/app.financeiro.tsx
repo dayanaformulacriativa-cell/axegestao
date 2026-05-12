@@ -47,6 +47,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 
 export const Route = createFileRoute("/app/financeiro")({
   component: FinancePage,
@@ -295,7 +296,7 @@ function FinancePage() {
                                     .from("finance_transactions")
                                     .delete()
                                     .eq("id", t.id);
-                                  if (error) toast.error(error.message);
+                                  if (error) toast.error(errorMessage(error));
                                   else {
                                     toast.success("Removido");
                                     load();
@@ -404,7 +405,7 @@ function NewTransactionDialog({
       reference_month: type === "income" ? referenceMonth || null : null,
     });
     setSaving(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success(type === "income" ? "Entrada registrada" : "Saída registrada");
       onSaved();

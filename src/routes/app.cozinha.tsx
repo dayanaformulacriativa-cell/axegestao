@@ -49,6 +49,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 
 export const Route = createFileRoute("/app/cozinha")({
   component: KitchenPage,
@@ -409,7 +410,7 @@ function MealForm({ members, onSaved }: { members: Member[]; onSaved: () => void
     });
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(errorMessage(error));
       return;
     }
     toast.success("Refeição agendada");
@@ -510,7 +511,7 @@ function HelperForm({ mealId, members, onSaved }: { mealId: string; members: Mem
       task: task || null,
     });
     if (error) {
-      toast.error(error.message);
+      toast.error(errorMessage(error));
       return;
     }
     toast.success("Ajudante adicionado");
@@ -591,7 +592,7 @@ function PantryForm({ onSaved }: { onSaved: () => void }) {
     });
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(errorMessage(error));
       return;
     }
     toast.success("Movimentação registrada");
@@ -705,7 +706,7 @@ function RecipeForm({ onSaved }: { onSaved: () => void }) {
     });
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(errorMessage(error));
       return;
     }
     toast.success("Receita salva");

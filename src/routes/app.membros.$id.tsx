@@ -20,6 +20,7 @@ import { ArrowLeft, Pencil, Trash2, Phone, Calendar as CalendarIcon } from "luci
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 import { MemberDialog } from "./app.membros";
 
 export const Route = createFileRoute("/app/membros/$id")({
@@ -54,7 +55,7 @@ function MemberDetail() {
 
   const handleDelete = async () => {
     const { error } = await supabase.from("members").delete().eq("id", id);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success("Removido");
       navigate({ to: "/app/membros" });

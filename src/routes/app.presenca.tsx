@@ -18,6 +18,7 @@ import { ClipboardCheck } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 
 export const Route = createFileRoute("/app/presenca")({
   component: AttendancePage,
@@ -63,7 +64,7 @@ function AttendancePage() {
       notes: notes.trim() || null,
     });
     setSaving(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success("Presença registrada");
       setTasks("");

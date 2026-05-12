@@ -30,6 +30,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 
 export const Route = createFileRoute("/app/calendario")({
   component: CalendarPage,
@@ -189,7 +190,7 @@ function EventCard({
 }) {
   const handleDelete = async () => {
     const { error } = await supabase.from("events").delete().eq("id", event.id);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success("Evento removido");
       onChanged();
@@ -266,7 +267,7 @@ function EventDialog({ onClose, onSaved }: { onClose: () => void; onSaved: () =>
       event_date,
     });
     setSaving(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success("Evento criado");
       onSaved();
