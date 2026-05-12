@@ -20,6 +20,7 @@ import { Plus, Search, ChevronRight, User as UserIcon, Phone, Calendar, Sparkles
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 
 export const Route = createFileRoute("/app/membros")({
   component: MembersPage,
@@ -53,7 +54,7 @@ function MembersPage() {
       .from("members")
       .select("*")
       .order("civil_name");
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else setMembers((data as Member[]) ?? []);
     setLoading(false);
   };
@@ -200,7 +201,7 @@ export function MemberDialog({
       ? await supabase.from("members").update(payload).eq("id", member.id)
       : await supabase.from("members").insert(payload);
     setSaving(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success(member ? "Atualizado" : "Cadastrado");
       onSaved();

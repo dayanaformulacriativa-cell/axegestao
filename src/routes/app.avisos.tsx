@@ -30,6 +30,7 @@ import { Megaphone, Plus, Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/error-message";
 
 export const Route = createFileRoute("/app/avisos")({
   component: AnnouncementsPage,
@@ -127,7 +128,7 @@ function AnnouncementsPage() {
                                 .from("announcements")
                                 .delete()
                                 .eq("id", a.id);
-                              if (error) toast.error(error.message);
+                              if (error) toast.error(errorMessage(error));
                               else {
                                 toast.success("Removido");
                                 load();
@@ -174,7 +175,7 @@ function NewAnnouncementDialog({
       content: content.trim(),
     });
     setSaving(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(errorMessage(error));
     else {
       toast.success("Aviso publicado");
       onSaved();
